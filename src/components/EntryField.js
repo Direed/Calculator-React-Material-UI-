@@ -31,7 +31,7 @@ class EntryField extends React.Component {
         let values = this.props.values;
         return (
             <Box id="input" >
-                <TextField id="outlined-basic" label="Enter:" variant="outlined" className='gg' value={values} onChange={this.props.changeValue}/>
+                <TextField id="outlined-basic" label="Enter:" variant="outlined" className='gg' value={values}/>
             </Box>
         )
     }

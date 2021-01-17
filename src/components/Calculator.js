@@ -21,31 +21,412 @@ const useStyles = makeStyles({
 class Calculator extends React.Component {
     constructor(props) {
         super(props);
-        this.changeValue = this.changeValue.bind(this);
         this.changeValueWithButton = this.changeValueWithButton.bind(this);
+        this.doingOperation = this.doingOperation.bind(this);
         this.state = {
             value: '',
             number: 0,
-            masButton: [1,2,3,"+",4,5,6,"-",7,8,9,"*",0,"/","%","CE"],
+            firstValue: 0,
+            secondValue: 1,
+            lastOperation: '',
+            statusCalculator: 'sleep',
+            masButton: ['CE','x^2', '%', '/', 7,8,9,'*',4,5,6,'-',1,2,3,'+','+/-',0,'.','='],
         }
     }
 
-    changeValue(e) {
-        e.preventDefault();
-        this.setState({
-            value: e.target.value,
-        })
-        console.log(this.state.value);
-    }
+    doingOperation(e){
+        switch (e.currentTarget.value) {
+            case "CE":
+                this.setState({
+                    value: '',
+                    lastOperation: '',
+                })
+                break;
+            case "x^2":
+                this.setState((state) => {
+                    return {
+                        firstValue: Math.pow(state.value, 2),
+                    }});
+                this.setState((state) => {
+                    return {
+                        value: state.firstValue,
+                    }});
+                this.setState({
+                    lastOperation: '',
+                })
+                break;
+            case "%":
+                this.setState((state) => {
+                    return {
+                        firstValue: state.value/100,
+                    }
+                })
+                this.setState((state) => {
+                    return {
+                        value: state.firstValue,
+                    }
+                })
+                this.setState({
+                    lastOperation: '',
+                })
+                break;
+            case "/":
+                if(this.state.lastOperation!=''){
+                    switch(this.state.lastOperation){
+                        case '/':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue / state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '*':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue * state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '-':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue - state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '+':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue + Number(state.value),
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                    }
+                } else {
+                    this.setState((state) => {
+                        return {
+                            firstValue: state.value,
+                        }
+                    });
+                    this.setState({
+                        value: '',
+                    })
+                }
+                this.setState({
+                    lastOperation: e.currentTarget.value,
+                    statusCalculator: 'work',
+                })
+                break;
+            case "*":
+                if(this.state.lastOperation!=''){
+                    switch(this.state.lastOperation){
+                        case '/':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue / state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '*':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue * state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '-':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue - state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '+':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue + Number(state.value),
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                    }
+                } else {
+                    this.setState((state) => {
+                        return {
+                            firstValue: state.value,
+                        }
+                    })
+                    this.setState({
+                        value: '',
+                    })
+                }
+                this.setState({
+                    lastOperation: e.currentTarget.value,
+                    statusCalculator: 'work',
+                })
+                break;
+            case "-":
+                if(this.state.lastOperation!=''){
+                    switch(this.state.lastOperation){
+                        case '/':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue / state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '*':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue * state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '-':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue - state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '+':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue + Number(state.value),
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                    }
+                } else {
+                    this.setState((state) => {
+                        return {
+                            firstValue: state.value,
+                        }
+                    })
+                    this.setState({
+                        value: '',
+                    })
+                }
+                this.setState({
+                    lastOperation: e.currentTarget.value,
+                    statusCalculator: 'work',
+                })
+                break;
+            case "+":
+                if(this.state.lastOperation!=''){
+                    switch(this.state.lastOperation){
+                        case '/':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue / state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '*':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue * state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '-':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue - state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '+':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue + Number(state.value),
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
 
+                            break;
+                    }
+                } else {
+                    this.setState((state) => {
+                        return {
+                            firstValue: Number(state.value),
+                        }
+                    })
+                    this.setState({
+                        value: '',
+                    })
+                }
+                this.setState({
+                    lastOperation: e.currentTarget.value,
+                    statusCalculator: 'work',
+                })
+                break;
+            case "+/-":
+
+                break;
+            case ".":
+
+                break;
+            case "=":
+                if(this.state.lastOperation!=''){
+                    switch(this.state.lastOperation){
+                        case '/':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue / state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '*':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue * state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '-':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue - state.value,
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                        case '+':
+                            this.setState((state) => {
+                                return {
+                                    firstValue: state.firstValue + Number(state.value),
+                                }
+                            })
+                            this.setState((state) => {
+                                return {
+                                    value: state.firstValue,
+                                }
+                            })
+                            break;
+                    }
+                } else {
+                    this.setState((state) => {
+                        return {
+                            firstValue: state.value,
+                        }
+                    })
+                }
+                this.setState({
+                    lastOperation: '',
+                })
+                break;
+        }
+    }
     changeValueWithButton(e){
         this.setState({number: e.currentTarget.value})
-        this.setState((state) => {
-            return {
-            value: state.value + state.number,
-        }});
-        console.log(this.state.number)
-        console.log(this.state.value)
+        if(this.state.statusCalculator === 'sleep'){
+            this.setState((state) => {
+                return {
+                    value: state.value + state.number,
+                }});
+        } else {
+            this.setState({
+                value: '',
+                statusCalculator: 'sleep',
+            })
+            this.setState((state) => {
+                return {
+                    value: state.value + state.number,
+                }});
+        }
     }
 
 
@@ -55,8 +436,8 @@ class Calculator extends React.Component {
         const values = this.state.value;
         return(
             <Box className='gg'>
-                <EntryField values = {values} changeValue= {this.changeValue} ></EntryField>
-                <Buttons values = {values} masButton = {masButton} changeValueWithButton={this.changeValueWithButton}></Buttons>
+                <EntryField values = {values}></EntryField>
+                <Buttons values = {values} masButton = {masButton} changeValueWithButton={this.changeValueWithButton} doingOperation={this.doingOperation}></Buttons>
             </Box>
         )
     }

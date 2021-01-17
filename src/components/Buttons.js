@@ -30,7 +30,10 @@ class Buttons extends React.Component {
     render() {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const buttons = this.state.masButton.map( button => {
-            return <Button variant={"contained"} className='gg' onClick={this.props.changeValueWithButton}  value={button}>{button}</Button>
+            if(typeof button != 'string'){
+                return <Button variant={"contained"} className='gg' onClick={this.props.changeValueWithButton}  value={button}>{button}</Button>
+            }
+            else return <Button variant={"contained"} className='gg' onClick={this.props.doingOperation}  value={button}>{button}</Button>
         })
         return(
             <Box className='gg'>{buttons}</Box>
