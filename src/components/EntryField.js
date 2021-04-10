@@ -1,19 +1,23 @@
 import React  from 'react';
-import {makeStyles} from "@material-ui/core/styles";
+import { withStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
 import TextField from "@material-ui/core/TextField";
 
-const useStyles = makeStyles({
+const useStyles = {
     field: {
-        width: '350px',
+        width: '360px',
+        backgroundColor: "#ffffff",
+        borderRadius: "5px 5px 0px 0px",
     },
     box: {
         display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+        marginBottom: "20px",
+        borderRadius: "50px",
     },
-});
+};
 
 
 class EntryField extends React.Component {
@@ -28,13 +32,14 @@ class EntryField extends React.Component {
 
     render() {
         // eslint-disable-next-line react-hooks/rules-of-hooks
+        const { classes } = this.props;
         let values = this.props.values;
         return (
-            <Box id="input" >
-                <TextField id="outlined-basic" label="Enter:" variant="outlined" className='gg' value={values}/>
+            <Box id="input" className={classes.box}>
+                <TextField color="" id="filled-basic" label="Enter:" variant="filled" className={classes.field} value={values}/>
             </Box>
         )
     }
 }
 
-export default EntryField;
+export default withStyles(useStyles)(EntryField);
