@@ -6,6 +6,8 @@ import { withStyles } from '@material-ui/core/styles';
 import Box from "@material-ui/core/Box";
 import Switch from "@material-ui/core/Switch";
 import AppBar from '@material-ui/core/AppBar';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
@@ -112,13 +114,30 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
+const StandartSwitch = withStyles({
+    switchBase: {
+        color: "black",
+        "&$checked": {
+            color: "yellow"
+        },
+        "&$checked + $track": {
+            backgroundColor: "#C4C4C4"
+        }
+    },
+    checked: {},
+    track: {}
+})(Switch);
+
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.enterSwitch = this.enterSwitch.bind(this);
+        this.handleClick = this.handleClick.bind(this);
+        this.handleClose = this.handleClose.bind(this);
         this.state = {
             date : new Date(),
             checkedSwitch: false,
+            anchorEl: null,
         }
     }
     componentDidMount() {
@@ -147,11 +166,24 @@ class App extends React.Component {
         }
     }
 
+    handleClick(event){
+        this.setState({
+            anchorEl: event.currentTarget,
+        })
+    }
+    handleClose(){
+        this.setState({
+            anchorEl: null,
+        })
+    }
+
+
+
     render() {
         return (
             <div>
                 <Header date = {this.state.date} checkedSwitch={this.state.checkedSwitch} changeSwitch={this.enterSwitch}/>
-                <NavBar checkedSwitch={this.state.checkedSwitch}></NavBar>
+                <NavBar checkedSwitch={this.state.checkedSwitch} anchorEl={this.state.anchorEl} handleClick={this.handleClick} handleClose={this.handleClose}></NavBar>
                 <Calculator checkedSwitch={this.state.checkedSwitch}></Calculator>
             </div>
         );
@@ -164,7 +196,7 @@ function Header(props) {
     const timeClass = props.checkedSwitch ? classes.time_dark_theme : classes.time;
     return (
         <Box className={headerClass}>
-            <Switch checked={props.checkedSwitch} name="checkedSwitch" onChange={props.changeSwitch}/>
+            <StandartSwitch checked={props.checkedSwitch} name="switchBase" onChange={props.changeSwitch}></StandartSwitch>
             <h1 className={mainTextClass}>CALCULATOR</h1>
             <h3 className={timeClass} >{props.date.toLocaleTimeString(navigator.language,{hour: '2-digit', minute:'2-digit'})}</h3>
         </Box>
@@ -179,13 +211,18 @@ function NavBar(props) {
     return (
             <AppBar position="static" className={menuClass}>
                 <Toolbar>
-                    <IconButton edge="start" className={menuButtonClass} color="inherit" aria-label="menu">
+                    <IconButton edge="start" className={menuButtonClass} color="inherit" aria-label="menu" aria-controls="simple-menu" aria-haspopup="true" onClick={props.handleClick}>
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={titleClass}>
                         Simple
                     </Typography>
                 </Toolbar>
+                <Menu id="simple-menu" anchorEl={props.anchorEl} keepMounted open={Boolean(props.anchorEl)} onClose={props.handleClose}>
+                    <MenuItem onClick={props.handleClose}>Simple</MenuItem>
+                    <MenuItem onClick={props.handleClose}>Engineering</MenuItem>
+                    <MenuItem onClick={props.handleClose}>Programmer</MenuItem>
+                </Menu>
             </AppBar>
     );
 }
