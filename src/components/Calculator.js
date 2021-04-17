@@ -1,6 +1,7 @@
 import React from 'react';
 import EntryField from "./EntryField";
 import Buttons from "./Buttons";
+import Story from "./Story";
 import ReactDOM from 'react-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Container from "@material-ui/core/Container";
@@ -13,22 +14,19 @@ const useStyles = {
         display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
         backgroundColor: "#FF8181",
     },
     box_dark_theme: {
         display: 'flex',
         flexDirection: "column",
         justifyContent: "center",
-        alignItems: "center",
         backgroundColor: "#505050",
     },
     story: {
-        display: 'flex',
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "300px",
+        backgroundColor: "#FF8181",
+    },
+    story_dark_theme: {
+        backgroundColor: "#505050",
     },
     containerForField: {
         display: 'flex',
@@ -63,6 +61,8 @@ class Calculator extends React.Component {
             lastOperation: '',
             statusCalculator: 'sleep',
             masButton: ['CE','x^2', '%', '/', 7,8,9,'*',4,5,6,'-',1,2,3,'+','+/-',0,'.','='],
+            strCalculation: '',
+            masCalculations: [],
         }
     }
 
@@ -129,6 +129,11 @@ class Calculator extends React.Component {
                     lastOperation: e.currentTarget.value,
                     statusCalculator: 'work',
                 })
+                this.setState((state) => {
+                    return {
+                    strCalculation: state.strCalculation + ' ' + state.lastOperation + ' ',
+                    }
+                })
                 break;
             case "+/-":
 
@@ -183,9 +188,17 @@ class Calculator extends React.Component {
                             })
                             this.setState((state) => {
                                 return {
+                                    strCalculation: state.strCalculation + state.value + ' = ' + state.firstValue,
                                     value: state.firstValue,
                                 }
                             })
+                            this.setState((state) => {
+                                return {
+                                    masCalculations: [...state.masCalculations, state.strCalculation],
+                                    strCalculation: '',
+                                }
+                            })
+                            console.log(this.state.strCalculation);
                             break;
                     }
                 } else {
@@ -245,6 +258,7 @@ class Calculator extends React.Component {
                     this.setState((state) => {
                         return {
                             firstValue: Number(state.firstValue) + Number(state.value),
+                            strCalculation: state.strCalculation + state.value,
                         }
                     })
                     this.setState((state) => {
@@ -258,6 +272,7 @@ class Calculator extends React.Component {
             this.setState((state) => {
                 return {
                     firstValue: state.value,
+                    strCalculation: state.strCalculation + state.value,
                 }
             })
             this.setState({
@@ -265,8 +280,6 @@ class Calculator extends React.Component {
             })
         }
     }
-
-
 
     changeValueWithButton(e){
         this.setState({number: e.currentTarget.value})
@@ -295,14 +308,15 @@ class Calculator extends React.Component {
         const values = this.state.value;
         const boxClass = this.props.checkedSwitch ? classes.box_dark_theme : classes.box;
         const containerForFieldClass = this.props.checkedSwitch ? classes.containerForField_dark_theme : classes.containerForField;
+        const storyClass = this.props.checkedSwitch ? classes.story_dark_theme : classes.story;
         return(
             <Box className={boxClass}>
             <Box className={containerForFieldClass}>
                 <EntryField values = {values}></EntryField>
                 <Buttons values = {values} masButton = {masButton} changeValueWithButton={this.changeValueWithButton} doingOperation={this.doingOperation}></Buttons>
             </Box>
-            <Box className={classes.story}>
-
+            <Box className={storyClass}>
+                <Story checkedSwitch={this.props.checkedSwitch} masCalculations = {this.state.masCalculations} ></Story>
             </Box>
             </Box>
         )
